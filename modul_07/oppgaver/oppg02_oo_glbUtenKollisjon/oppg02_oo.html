@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+	<meta charset="utf-8">
+	<title>Oppg2 Object-Oriented</title>
+</head>
+
+<body>
+	<script src="../../../lib/three/ammo/ammo.js"></script>
+	<h5>Ammo, kuler, hinge constraint, styrbar kube</h5>
+	<div>
+		<li>Generer nye kuler vha. H.</li>
+		<li>Flytt på kuben vha. WASD</li>
+		<li>Roter hengsel med VB</li>
+	</div>
+	<script type="module">
+		import {AmmoShapesApp} from "./js/AmmoShapesApp.js";
+
+		// Ammojs initialisering:
+		Ammo().then( startApp() );
+		// Starter ...:
+		function startApp() {
+			let ammoShapesApp = new AmmoShapesApp();
+			ammoShapesApp.start();
+		}
+	</script>
+</body>
+</html>
+

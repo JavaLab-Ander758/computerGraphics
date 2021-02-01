@@ -1,0 +1,11 @@
+FILE --> URL
+
+___________________________________________________________________
+walls\Dungeon_wall2.jpg --> https://opengameart.org/content/medieval-wall
+doors\castledoors.png   --> https://opengameart.org/content/castle-door
+windows\windows_with_flowerboxes.png --> https://opengameart.org/content/lpc-windows-rework
+roofs\Blue Roof.png --> Blue Roof.png
+doors\sign_browndoor.PNG --> https://opengameart.org/content/door-textures
+windows\DSCF0499.JPG --> https://opengameart.org/content/brown-plastic-window-with-matted-glass
+roofs\roof south.png --> https://opengameart.org/content/planetcute-roof-southpng
+walls\brick_wall2-diff-1024.jpg --> https://opengameart.org/content/brick-wall

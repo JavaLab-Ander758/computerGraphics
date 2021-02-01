@@ -1,0 +1,23 @@
+FILENAME                    | URL
+________________________________________________________________
+/assets/textures/OpenGameArt/SkyBox/mountain-skyboxes/*                  | https://opengameart.org/content/mountain-skyboxes
+/assets/textures/OpenGameArt/wood 2.jpg                                  | https://opengameart.org/content/wood-texture-tiles
+/assets/textures/OpenGameArt//Planks                                     | https://opengameart.org/content/seamless-planks
+/assets/textures/OpenGameArt/floor/metal1-1024/*                         | https://opengameart.org/content/metal-plate-grey-dirty
+/assets/textures/OpenGameArt/floor/arrow.png                             | https://opengameart.org/content/glow-arrow
+/assets/textures/OpenGameArt/domino set                                  | https://opengameart.org/content/dominos
+/assets/textures/OpenGameArt/Metal_seamless2_ch16.jpg                    | https://opengameart.org/content/grey-metal
+/assets/textures/OpenGameArt/BoxHouse/christmas-wreath.png               | https://opengameart.org/content/christmas-wreath-0
+/assets/textures/OpenGameArt/BoxHouse/present-gift-box-reward-full.png   | https://opengameart.org/content/present-gift-box-reward-seasonal
+/assets/textures/OpenGameArt/BoxHouse/pango.png                          | https://opengameart.org/content/penguins
+/assets/textures/OpenGameArt/BoxHouse/santa_1.png                        | https://opengameart.org/content/penguins
+/assets/textures/cloud.png                                               | /del7-2020/ShaderWater.html
+
+/assets/sound/OpenGameArt/cannon/launches/*                              | https://opengameart.org/content/4-projectile-launches
+/assets/sound/OpenGameArt/song_main/S31-Going Deep.ogg                   | https://opengameart.org/content/going-deep
+/assets/sound/OpenGameArt/cannon/falling/*                               | https://www.youtube.com/watch?v=sXsQwZSHOto
+/assets/sound/trench/High speed passby.mp3                               | https://freesound.org/people/juskiddink/sounds/150852/
+
+/assets/fonts/helvetiker_regular.typeface.json                           | /del6-2020/convexAndText1.html
+
+/assets/tree.blend                                                       | https://free3d.com/3d-model/christmas-tree-38182.html

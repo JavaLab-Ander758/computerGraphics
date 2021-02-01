@@ -1,0 +1,202 @@
+<!-- Shaderne og strukturen i Village.html er basert på html-filene i del10 fra modul 6 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Village</title>
+</head>
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        /*width: 20%;*/
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+<body>
+
+<canvas id="webgl" width="900" height="900">
+    Denne nettleseren støtter ikke "canvas"-elementet!
+</canvas>
+<div id="fps-counter">
+    FPS: <span id="fps">--</span><br>
+    Base-URI: <span id="uri">--</span>
+
+    <table>
+        <tr>
+            <th>How to..</th>
+            <th>Keyboard keys</th>
+            <th>Extra</th>
+        </tr>
+        <tr>
+            <td>Rotate Camera</td>
+            <td>WASD</td>
+        </tr>
+        <tr>
+            <td>Move light source</td>
+            <td>x: IJ, y: KL, z: MN</td>
+        </tr>
+        <tr>
+            <td>Zoom in/out</td>
+            <td>B/V</td>
+        </tr>
+        <tr>
+            <td>Rotate wheels of cars</td>
+            <td>Arrow left/right</td>
+            <td>Select car by pressing keys 1->6</td>
+        </tr>
+    </table>
+</div>
+
+<script src="lib/webgl-utils.js"></script>
+<script src="lib/webgl-debug.js"></script>
+<script src="lib/cuon-utils.js"></script>
+<script src="lib/cuon-matrix.js"></script>
+<script src="lib/gl-matrix-min.js"></script>
+<script src="lib/wfa-helpers.js"></script>
+
+<script src="js/wrapper.js"></script>
+<script src="js/Stack.js"></script>
+<script src="js/Camera.js"></script>
+<script src="js/Coord.js"></script>
+<script src="js/Plane.js"></script>
+<script src="js/PointLight.js"></script>
+<script src="js/House.js"></script>
+<script src="js/Car.js"></script>
+<script src="js/Tire.js"></script>
+<script src="js/Village.js"></script>
+
+<script src="js/Main.js"></script>
+
+<!-- COORD SHADERS -->
+<script id="coord-vertex-shader" type="x-shader/x-vertex">
+        attribute vec3 a_Position;
+	    attribute vec4 a_Color;
+		uniform mat4 u_modelviewMatrix;
+		uniform mat4 u_projectionMatrix;
+		varying vec4 v_Color;
+		void main() {
+	  		gl_Position = u_projectionMatrix * u_modelviewMatrix * vec4(a_Position,1.0);
+	  		v_Color = a_Color;
+		}
+</script>
+<script id="coord-fragment-shader" type="x-shader/x-fragment">
+    	precision mediump float;
+		varying vec4 v_Color;
+		void main() {
+	  		gl_FragColor = v_Color;
+		}
+</script>
+
+<!-- MODEL SHADERS, PHONG-SHADING -->
+<script id="model-phong-vertex-shader" type="x-shader/x-vertex">
+	    attribute vec2 a_TextureCoord;
+	    attribute vec3 a_Position;
+		attribute vec3 a_Normal;
+
+		uniform mat4 u_modelMatrix;
+		uniform mat4 u_modelviewMatrix;
+		uniform mat4 u_projectionMatrix;
+
+		varying vec2 v_Texture;
+		varying vec3 v_Normal;
+		varying vec4 v_vertexPosition;
+
+		void main() {
+            vec4 vertexPosition = u_modelMatrix * vec4(a_Position, 1.0);
+            v_vertexPosition = vertexPosition;
+            v_Normal = a_Normal;
+
+			gl_Position = u_projectionMatrix * u_modelviewMatrix * vec4(a_Position, 1.0);
+			v_Texture = a_TextureCoord;
+		}
+</script>
+
+<!--Based on fragment shader in 'XZPlaneGouradPhongShading1.js' and 'SpecularCubeGourad1.js'--->
+<script id="model-phong-fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+
+    varying vec2 v_Texture;
+    uniform sampler2D uSampler;
+
+    uniform mat3 u_normalMatrix;
+
+    uniform vec3 u_lightDirection;
+    uniform vec3 u_lightPosition;
+    uniform vec3 u_ambientLightColor;
+    uniform vec3 u_diffuseLightColor;
+    uniform vec3 u_cameraPosition;
+    uniform vec3 u_specularLightColor;
+
+    const float shininess = 32.0;
+    const float intensity = 3.0;
+
+    varying vec3 v_Normal;
+    varying vec4 v_vertexPosition;
+
+    void main() {
+
+        vec3 normalVector = normalize(u_normalMatrix * v_Normal);
+
+        vec3 vectorToLightSource = normalize(u_lightPosition - vec3(v_vertexPosition));
+
+        float diffusLightWeightningToLight = max(dot(normalVector, vectorToLightSource), 0.0);
+
+        vec3 vectorFromLightSource = normalize(u_lightDirection);
+
+        float diffuseLightWeightningDirectional = max(dot(normalVector, vectorFromLightSource), 0.0);
+        float diffuseLightWeightning = max(diffusLightWeightningToLight, diffuseLightWeightningDirectional);
+
+        vec3 viewDirection = normalize(u_cameraPosition -  vec3(v_vertexPosition));
+        vec3 lightDirection = normalize(u_lightPosition - vec3(v_vertexPosition));	//= normalize(u_lightPosition);
+        vec3 specularReflection;
+
+        if (dot(normalVector, lightDirection) < 0.0) {
+            specularReflection = vec3(0.0, 0.0, 0.0);
+        } else {
+            vec3 reflectedVector = normalize(reflect(-lightDirection, normalVector));
+            float cosAngle = max(0.0, dot(reflectedVector, viewDirection));
+            specularReflection = intensity * vec3(u_specularLightColor) *  pow(cosAngle, shininess);
+        }
+
+        vec3 lightWeighting = (u_diffuseLightColor * diffuseLightWeightning) + u_ambientLightColor + specularReflection;
+
+        gl_FragColor = vec4(lightWeighting.rgb, 1.0) * texture2D(uSampler, vec2(v_Texture.s, v_Texture.t));
+    }
+</script>
+
+<!-- POINT LIGHT SOURCE SHADERS -->
+<script id="light-source-vertex-shader" type="x-shader/x-vertex">
+		attribute vec3 a_Position;
+		uniform mat4 u_modelviewMatrix;
+		uniform mat4 u_projectionMatrix;
+		void main() {
+			gl_Position = u_projectionMatrix * u_modelviewMatrix * vec4(a_Position,1.0);
+		}
+</script>
+<script id="light-source-fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+		uniform vec4 u_FragColor;
+		void main() {
+			gl_FragColor = u_FragColor;
+		}
+</script>
+
+<script>
+    'use strict';
+    const main = new Main();
+    main.start();
+</script>
+
+</body>
+</html>

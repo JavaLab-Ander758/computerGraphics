@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>oppg1 - WebGL</title>
+</head>
+
+<body onload="main(); fetchVendorNames()">
+<canvas id="webgl" width="600" height="600">
+    Denne nettleseren støtter ikke "canvas"-elementet!
+</canvas>
+
+<div id="fps-counter">
+    FPS:        <span id="fps">--</span><br>
+    How-to-use: Se rundt med WASD og slå av/på blueprint med mellomrom<br><br>
+    GPU:        <span id="VENDOR_GPU">---</span><br>
+    Browser:    <span id="VENDOR_BROWSER">---</span><br>
+    OS:         <span id="VENDOR_OS">---</span><br><br>
+    Base-URI:   <span id="uri">--</span><br>
+</div>
+
+<script src="../lib/webgl-utils.js"></script>
+<script src="../lib/webgl-debug.js"></script>
+<script src="../lib/cuon-utils.js"></script>
+<script src="../lib/cuon-matrix.js"></script>
+<script src="../lib/gl-matrix-min.js"></script>
+<script src="../lib/wfa-helpers.js"></script>
+<script src="js/oppg1.js"></script>
+<script src="../lib/VENDOR_FETCHER.js"></script>
+
+</body>
+</html>

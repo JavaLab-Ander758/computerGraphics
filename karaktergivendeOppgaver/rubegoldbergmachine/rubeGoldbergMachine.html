@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+	<meta charset="utf-8">
+	<title>Rube Goldberg machine with Three.js and Ammo.js</title>
+</head>
+
+<body>
+	<script src="lib/three/ammo/ammo.js"></script>
+	<h5>Ammo</h5>
+	<div>
+		<li>Make sure you have sound for sound-effects!</li>
+		<li>Move camera with A/D during domino reaction</li>
+	</div>
+	<script type="module">
+		import {RubeGoldbergApp} from "./js/RubeGoldbergApp.js";
+
+		// Ammojs initialisering:
+		Ammo().then(startApp());
+		// Starter ...:
+		function startApp() {
+			let rubeGoldbergApp = new RubeGoldbergApp();
+			rubeGoldbergApp.start();
+		}
+	</script>
+
+
+	<script type="x-shader/x-vertex" id="vertexShader">
+	varying vec2 vUv;
+	void main()
+	{
+		vUv = uv;
+		gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+	}
+	</script>
+	<script type="x-shader/x-vertex" id="fragmentShader">
+	uniform sampler2D baseTexture;
+	uniform float baseSpeed;
+	uniform sampler2D noiseTexture;
+	uniform float noiseScale;
+	uniform float alpha;
+	uniform float time;
+
+	varying vec2 vUv;
+	void main()
+	{
+		vec2 uvTimeShift = vUv + vec2( -0.7, 1.5 ) * time * baseSpeed;
+		vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
+		vec2 uvNoiseTimeShift = vUv + noiseScale * vec2( noiseGeneratorTimeShift.r, noiseGeneratorTimeShift.b );
+		vec4 baseColor = texture2D( baseTexture, uvNoiseTimeShift );
+
+		baseColor.a = alpha;
+		gl_FragColor = baseColor;
+	}
+	</script>
+
+</body>
+</html>
+

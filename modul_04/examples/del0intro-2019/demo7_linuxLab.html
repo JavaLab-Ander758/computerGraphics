@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <title>Demo7 LinuxLab - Three.js</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<canvas id="webgl">
+    Denne nettleseren støtter ikke canvas-elementet!
+</canvas>
+
+<script type="module">
+    (function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
+
+    'use strict';
+    import {main} from "./js/demo7.js";
+    // Starter her:
+    main();
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Exercise 13b: Pyramid Directional Lights</title>
+</head>
+<body onload="main()">
+	<button onclick="window.history.back()">Go Back</button>
+	<br><br>
+	<canvas id="canvas" width="800" height="800">
+		This browser doesn't support "canvas"-elements!
+	</canvas>
+
+	<table style="width: 800px; table-layout: fixed">
+		<tr>
+			<td style="text-align: left">Camera: WASD</td>
+			<td style="text-align: right">Zoom: Q(in)/E(out)</td>
+		</tr>
+	</table>
+
+	<script src="../../../lib/webgl-utils.js"></script>
+	<script src="../../../lib/webgl-debug.js"></script>
+	<script src="../../../lib/cuon-utils.js"></script>
+	<script src="../../../lib/cuon-matrix.js"></script>
+	<script src="../../../lib/gl-matrix-min.js"></script>
+	<script src="../../../lib/wfa-helpers.js"></script>
+	<script src="PyramidDirectionalLights.js"></script>
+	<script src="../Helpers.js"></script>
+
+	<script id="pyramid-vertex-shader" type="x-shader/x-vertex">
+		attribute vec3 a_Position;
+		attribute vec2 a_TextureCord;
+		attribute vec3 a_Normal;
+		uniform mat3 u_normalMatrix;
+		uniform mat4 u_modelViewMatrix;
+		uniform mat4 u_projectionMatrix;
+		uniform vec3 u_lightDirection0;
+		uniform vec3 u_lightDirection1;
+		uniform vec3 u_ambientLightColor;
+		uniform vec3 u_diffuseLightColor;
+		varying vec2 v_Texture;
+		varying vec3 v_lightWeighting;
+		const int numberOfLights = 2;
+		vec3 lights[numberOfLights];
+		void main() {
+			vec3 normal = normalize(u_normalMatrix * a_Normal);
+			lights[0] = u_lightDirection0;
+			lights[1] = u_lightDirection1;
+			for (int i = 0; i < numberOfLights; i++) {
+				vec3 lightDirectionNorm = normalize(lights[i]);
+				float diffuseLightWeighting = max(dot(normal, lightDirectionNorm), 0.0);
+				v_lightWeighting += u_ambientLightColor + (u_diffuseLightColor * diffuseLightWeighting);
+			}
+			gl_Position = u_projectionMatrix * u_modelViewMatrix * vec4(a_Position, 1.0);
+			v_Texture = a_TextureCord;
+		}
+
+	</script>
+</body>
+</html>
